@@ -1,0 +1,337 @@
+<apex:page docType="html-5.0" title="Gainsight - Demo Setup" controller="DemoSetUp_Controller" sidebar="false" showHeader="false" standardStylesheets="false">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <style>
+    .panel-default>.panel-heading {
+        color: #5B676F;
+        background-color: white !important;
+        border-color: #ddd;
+        padding: 2%;
+    }
+    </style>
+    <apex:form >
+        <div class="container-fluid">
+            <center>
+                <img width="20%" src="http://www.siia.net/archive/codies/2015/finalists/logos/2-Gainsight_Logo_Final-01.png" />
+                <h2 style="color:#5B676F;margin-top: -10px;">Demo Colorisation</h2>
+            </center>
+            <apex:actionStatus id="loader">
+                <apex:facet name="start">
+                    <div class="waitingSearchDiv" id="el_loading" style="z-index: 9999;background-color: #F1F1F1;height: 100%;opacity:0.8;width:100%; position: absolute;">
+                        <center>
+                            <img style="margin-top: 10%;z-index: 9999;" src="/resource/1470212561000/loading" />
+                        </center>
+                    </div>
+                </apex:facet>
+            </apex:actionStatus>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="heading7">
+                                <h4 class="panel-title">
+                                     <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse7" aria-expanded="false" aria-controls="collapseSix">• Update User Details </a>
+                                 </h4>
+                            </div>
+                            <div id="collapse7" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading6">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <apex:inputField value="{!loginUser.FirstName}" html-placeholder="First Name" styleClass="form-control" />
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <apex:inputField value="{!loginUser.LastName}" html-placeholder="Last Name" styleClass="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <apex:inputField value="{!loginUser.Email}" html-placeholder="User Email" styleClass="form-control" />
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <center>
+                                                        <apex:commandButton value="Update" action="{!saveUserDetails}" styleClass="btn btn-success" rerender="accPanel" status="loader" />
+                                                    </center>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne">
+                                <h4 class="panel-title">
+                                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                • Update Account Names
+                                            </a>
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                <div class="panel-body">
+                                    <div class="auto-complete">
+                                        <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Account" valueField="Id" targetField="{!accountId}" style="width:200px" syncManualEntry="false" />&nbsp;&nbsp;
+                                        <apex:commandLink styleClass="btn btn-info" value="Quick Edit" action="{!getAccounts}" rerender="accPanel" status="loader" />
+                                        <br />
+                                        <br />
+                                    </div>
+                                    <apex:outputPanel id="accPanel">
+                                        <table class="table table-condensed table-bordered">
+                                            <tr style="color: #009DDC;">
+                                                <th>Account Name</th>
+                                                <th>Industry</th>                                               
+                                            </tr>
+                                            <apex:repeat value="{!accountsList}" var="acc">
+                                                <tr>
+                                                    <td>
+                                                        <apex:inputField value="{!acc.Name}" />
+                                                    </td>
+                                                    <td>
+                                                        <apex:inputField value="{!acc.Industry}" />
+                                                    </td>                                                    
+                                                </tr>
+                                            </apex:repeat>
+                                        </table>
+                                    </apex:outputPanel>
+                                    <div style="float:right;">
+                                        <apex:commandLink styleClass="btn btn-success" action="{!updateAccounts}" value="Save" rerender="accPanel, msgPanel" status="loader" />&nbsp;&nbsp;
+                                        <apex:commandLink styleClass="btn btn-danger" action="{!resetAccounts}" value="Reset" rerender="accPanel, msgPanel" status="loader" />
+                                    </div>
+                                    <br />
+                                    <br />
+                                    <div class="row">
+                                        <div class="eventMsg">
+                                            <apex:outputPanel id="msgPanel">
+                                                <apex:outputPanel id="msgSuccess" rendered="{!accSuccess}">
+                                                    <div class="alert alert-success alert-dismissible" role="alert">
+                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <strong>Success!</strong> Accounts updated successfully!!
+                                                    </div>
+                                                </apex:outputPanel>
+                                                <apex:outputPanel id="msgFailure" rendered="{!accFailure}">
+                                                    <div class="alert alert-error alert-dismissible" role="alert">
+                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <strong>Error!</strong> Failed to Update, Please refresh page and try again.
+                                                    </div>
+                                                </apex:outputPanel>
+                                            </apex:outputPanel>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingTwo">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                • Update Licenses and renewal dates
+                                            </a>
+                                </h4>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                <div class="panel-body">
+                                    <div class="auto-complete">
+                                        <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="JBCXM__CustomerName__c" SObject="JBCXM__CustomerInfo__c" valueField="Id" targetField="{!customerInfoId}" style="width:200px" syncManualEntry="false" />&nbsp;&nbsp;
+                                        <apex:commandLink styleClass="btn btn-info" value="Quick Edit" action="{!getCustomerLicenses}" rerender="cutomerInfoPanel" status="loader" />
+                                        <br />
+                                        <br />
+                                    </div>
+                                    <apex:outputPanel id="cutomerInfoPanel">
+                                        <table class="table table-condensed table-bordered">
+                                            <tr style="color: #009DDC;">
+                                                <th>Customer Name</th>
+                                                <th>ASV</th>
+                                                <th>Users</th>
+                                                <th>Next Renewal Date</th>
+                                                <th>MRR</th>
+                                            </tr>
+                                            <apex:repeat value="{!customerInfoList}" var="cus">
+                                                <tr>
+                                                    <td>
+                                                        <apex:inputField value="{!cus.JBCXM__CustomerName__c}" />
+                                                    </td>
+                                                    <td>
+                                                        <apex:inputField value="{!cus.JBCXM__ASV__c}" />
+                                                    </td>
+                                                    <td>
+                                                        <apex:inputField value="{!cus.JBCXM__Users__c}" />
+                                                    </td>
+                                                    <td>
+                                                        <apex:inputField value="{!cus.JBCXM__NextRenewalDate__c}" />
+                                                    </td>
+                                                    <td>
+                                                        <apex:inputField value="{!cus.JBCXM__MRR__c}" />
+                                                    </td>
+                                                </tr>
+                                            </apex:repeat>
+                                        </table>
+                                    </apex:outputPanel>
+                                    <div style="float:right;">
+                                        <apex:commandLink styleClass="btn btn-success" action="{!updateCustomerInfoList}" value="Save" rerender="cutomerInfoPanel" status="loader" />&nbsp;&nbsp;
+                                        <apex:commandLink styleClass="btn btn-danger" action="{!resetCustomerInfoList}" value="Reset" rerender="cutomerInfoPanel" status="loader" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingThree">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                • Update Task due date
+                                            </a>
+                                </h4>
+                            </div>
+                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <apex:input styleclass="form-control" value="{!dateField}" type="date" />
+                                            <br />
+                                            <apex:commandLink styleClass="btn btn-success" action="{!updateTaskDate}" value="Update Date" style="width: 100%;" rerender="CtaPanel" status="loader" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="panel panel-default">
+                                                <div class="panel-body" style="padding-top: 3px;">
+                                                    <apex:outputPanel id="CtaPanel">
+                                                        <h5>Output</h5>
+                                                        <hr style="margin-top: 0px; margin-bottom: 20px; border: 0; border-top: 3px solid #eee;" />
+                                                    </apex:outputPanel>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingFour">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                                • Update CTA date
+                                            </a>
+                                </h4>
+                            </div>
+                            <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <apex:input styleclass="form-control" value="{!dateField}" type="date" />
+                                            <br />
+                                            <apex:commandLink styleClass="btn btn-success" action="{!updateCTADate}" value="Update Date" style="width: 100%;" rerender="CtaPanel" status="loader" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="panel panel-default">
+                                                <div class="panel-body" style="padding-top: 3px;">
+                                                    <apex:outputPanel id="taskPanel">
+                                                        <h5>Output</h5>
+                                                        <hr style="margin-top: 0px; margin-bottom: 20px; border: 0; border-top: 3px solid #eee;" />
+                                                    </apex:outputPanel>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingFive">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                                • Scorecard script (update scorecard history)
+                                            </a>
+                                </h4>
+                            </div>
+                            <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <apex:commandLink status="loader" action="{!refreshScoreCard}" rerender="scPanel" styleClass="btn btn-success" value="Refresh Score" style="width: 40%; height: 55px; line-height: 35px; font-size: large; margin-left: 25%;" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="panel panel-default">
+                                                <div class="panel-body" style="padding-top: 3px;">
+                                                    <apex:outputPanel id="scPanel">
+                                                        <h5>Output</h5>
+                                                        <hr style="margin-top: 0px; margin-bottom: 20px; border: 0; border-top: 3px solid #eee;" />
+                                                    </apex:outputPanel>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingTwo">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                                    • Sponsor Tracking (Change eBay to another company name)
+                                                </a>
+                                </h4>
+                            </div>
+                            <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <apex:inputText value="{!fromCompany}" html-placeholder="Replace From" styleClass="form-control" />
+                                            <br />
+                                            <apex:inputText value="{!toCompany}" html-placeholder="Replace To" styleClass="form-control" />
+                                            <br />
+                                            <apex:commandLink styleClass="btn btn-success" action="{!updateCompany}" value="Update" rerender="comPanel" style="width:100%;" status="loader" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="panel panel-default">
+                                                <div class="panel-body" style="padding-top: 3px;">
+                                                    <apex:outputPanel id="comPanel">
+                                                        <h5>Output</h5>
+                                                        <hr style="margin-top: 0px; margin-bottom: 20px; border: 0; border-top: 3px solid #eee;" />
+                                                    </apex:outputPanel>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingEight">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                                                • Update Customer Health Score
+                                            </a>
+                                </h4>
+                            </div>
+                            <div id="collapseEight" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingEight">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <apex:commandLink status="loader" action="{!updateHealthScore}" rerender="healthScore" styleClass="btn btn-success" value="Refresh Health Score" style="width: 40%; height: 55px; line-height: 35px; font-size: large; margin-left: 25%;" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="panel panel-default">
+                                                <div class="panel-body" style="padding-top: 3px;">
+                                                    <apex:outputPanel id="healthScore">
+                                                        <h5>Note</h5>
+                                                        <hr style="margin-top: 0px; margin-bottom: 20px; border: 0; border-top: 3px solid #eee;" /> 
+                                                            <p>For Now, Customers having health score lessthan 50 gets updated with a random number between 51 &amp; 98 </p>
+                                                    </apex:outputPanel>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </apex:form>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+</apex:page>
