@@ -92,9 +92,9 @@
                                                     <td>
                                                         <apex:inputField value="{!acc.Name}" />
                                                     </td>
-                                                    <td>
+                                                  <!--  <td>
                                                         <apex:inputField value="{!acc.Industry}" />
-                                                    </td>                                                    
+                                                    </td>    -->                                                
                                                 </tr>
                                             </apex:repeat>
                                         </table>
