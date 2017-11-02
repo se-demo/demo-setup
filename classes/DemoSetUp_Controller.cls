@@ -38,7 +38,7 @@ public class DemoSetUp_Controller {
         // fix CTA views invoked here
         fixCTA_views();
         fixTask_DueDates(); 
-        fixCTAs_DueDates()
+        fixCTAs_DueDates();
     }
 
     public void getAccounts() {
