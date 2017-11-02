@@ -323,6 +323,26 @@ public class DemoSetUp_Controller {
             update viewList;
         }
     }
+    
+    public void fixTask_DueDates(){
+        List<JBCXM__CSTask__c> taskList = new List<JBCXM__CSTask__c>();
+        for(JBCXM__CSTask__c task : [SELECT Id, JBCXM__Date__c FROM JBCXM__CSTask__c WHERE JBCXM__Date__c != null]){
+            task.JBCXM__Date__c = task.JBCXM__Date__c + 7;
+            taskList.add(task);  
+            system.debug('updating Task due date => '+task.JBCXM__Date__c);
+        }
+        update taskList;
+    }
+    
+    public void fixCTAs_DueDates(){
+        List<JBCXM__CTA__c> CTAList = new List<JBCXM__CTA__c>();
+        for(JBCXM__CTA__c CTA : [SELECT Id,JBCXM__Assignee__c,Name,JBCXM__DueDate__c FROM JBCXM__CTA__c WHERE JBCXM__DueDate__c != null]){
+            CTA.JBCXM__DueDate__c = CTA.JBCXM__DueDate__c + 7;
+            CTAList.add(CTA);  
+            system.debug('updating cta due date => '+CTA.JBCXM__DueDate__c);
+        }
+        update CTAList;
+    }
 
 }
 /* 
