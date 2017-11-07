@@ -304,18 +304,7 @@ public class DemoSetUp_Controller {
     public Integer getRandomNumber_10() {
         return Integer.ValueOf(Math.floor(Math.random() * (90 - 10 + 1) + 10));
     }
-    public void alertSponsorTracking() {
-        List < JBCXM__SponsorTracking__c > updateList = new List < JBCXM__SponsorTracking__c > ();
-        for (JBCXM__SponsorTracking__c st: [select id, JBCXM__IsChanged__c FROM JBCXM__SponsorTracking__c WHERE JBCXM__SponsorFullName__c IN('Mike Madison', 'Laura James')]) {
-            st.JBCXM__IsChanged__c = true;
-            updateList.add(st);
-        }
-
-        if (updateList.size() > 0) {
-            update updateList;
-        }
-    }
-
+    
     public void fixCTA_views() {
         List < JBCXM__GSCockpitView__c > viewList = new LIst < JBCXM__GSCockpitView__c > ();
         Id newId = [SELECT Id, Name FROM JBCXM__GSReportCategory__c WHERE Name = 'Open'].Id;
