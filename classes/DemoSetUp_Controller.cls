@@ -1,9 +1,9 @@
 public class DemoSetUp_Controller {
 
-    public List < Account > accountsList { get; set; } 
-    public List < JBCXM__CustomerInfo__c > customerInfoList { get; set; }
-    public List < JBCXM__SurveyMaster__c > surveyList { get; set; }
-    public string accountId { get; set; } 
+    public List < Account > accountsList {get; set;}
+    public List < JBCXM__CustomerInfo__c > customerInfoList {get; set;}
+    public List < JBCXM__SurveyMaster__c > surveyList {get; set;}
+    public string accountId {get; set;}
     public string customerInfoId {get; set;}
     public string surveyId {get; set;}
     public string fromCompany {get; set;}
@@ -20,7 +20,7 @@ public class DemoSetUp_Controller {
     set < Id > sIds = new Set < Id > ();
 
     public DemoSetUp_Controller() {
-        loginUser = [SELECT Id, FirstName, LastName, Email FROM User WHERE Id = : UserInfo.getUserId()];
+        loginUser = [SELECT Id, FirstName, LastName, Email FROM User WHERE Id =: UserInfo.getUserId()];
         accountsList = new List < Account > ();
         accountsList = [Select Id, name, Industry from Account where Name IN('Abbett', 'Facebook', 'Sharp', 'Symantec', 'Udemy', 'Google Inc.', 'Apple', 'AAA', 'Spotify', 'Xerox', 'Kaspersky Lab')];
         customerInfoList = new List < JBCXM__CustomerInfo__c > ();
@@ -37,8 +37,9 @@ public class DemoSetUp_Controller {
         update loginUser;
         // fix CTA views invoked here
         fixCTA_views();
-        fixTask_DueDates(); 
+        fixTask_DueDates();
         fixCTAs_DueDates();
+        alertSponsorTracking();
     }
 
     public void getAccounts() {
@@ -187,38 +188,42 @@ public class DemoSetUp_Controller {
         Date weekStart = myDate.toStartofWeek() - 7;
         system.debug(weekStart);
         Integer i = 25;
-        List<JBCXM__USageData__c> udList = new List<JBCXM__USageData__c>();
+        List < JBCXM__USageData__c > udList = new List < JBCXM__USageData__c > ();
         JBCXM__USageData__c ud;
-        while( i > 1){
-           try {
-               ud = [SELECT id, JBCXM__WeekLabel__c, SC_Overallscore__c, SC_a0no000000KmmKWAAZ__c, SC_a0no000000KmmEuAAJ__c, SC_a0no000000KmmJLAAZ__c, SC_a0no000000KmmHyAAJ__c, SC_a0no000000KmmJGAAZ__c, SC_a0no0000000n0N6AAI__c, SC_a0no0000000n0N5AAI__c, SC_a0no0000000n0N3AAI__c FROM JBCXM__USageData__c WHERE Name = 'ACCOUNTLEVEL' AND JBCXM__Account__c =: accountId AND JBCXM__WeekLabel__c =: weekStart]; } Catch (Exception Ex){
-               system.debug('no records for week '+weekStart);
-               ud = new JBCXM__USageData__c();
-           }
-           if(ud.Id == null){
-               ud.JBCXM__Account__c = accountId;
-               ud.JBCXM__WeekLabel__c = weekstart;
-               ud.JBCXM__Date__c = weekStart;
-               ud.Name = 'ACCOUNTLEVEL';
-           }
-           ud.SC_Overallscore__c = Decimal.valueOf(getRandomNumber_35());
-           ud.SC_a0no000000KmmKWAAZ__c = Decimal.valueOf(getRandomNumber_35());
-           ud.SC_a0no000000KmmEuAAJ__c = Decimal.valueOf(getRandomNumber_35());
-           ud.SC_a0no000000KmmJLAAZ__c = Decimal.valueOf(getRandomNumber_35());
-           ud.SC_a0no000000KmmHyAAJ__c = Decimal.valueOf(getRandomNumber_35());
-           ud.SC_a0no000000KmmJGAAZ__c = Decimal.valueOf(getRandomNumber_35());
-           ud.SC_a0no0000000n0N6AAI__c = Decimal.valueOf(getRandomNumber_35());
-           ud.SC_a0no0000000n0N5AAI__c = Decimal.valueOf(getRandomNumber_35());
-           ud.SC_a0no0000000n0N3AAI__c = Decimal.valueOf(getRandomNumber_35());
-           udList.add(ud);
-           system.debug('inserted ud => '+ud);
-           
-           weekStart = weekStart - 7;
-           i--;
+        while (i > 1) {
+            try {
+                ud = [SELECT id, JBCXM__WeekLabel__c, SC_Overallscore__c, SC_a0no000000KmmKWAAZ__c, SC_a0no000000KmmEuAAJ__c, SC_a0no000000KmmJLAAZ__c, SC_a0no000000KmmHyAAJ__c, SC_a0no000000KmmJGAAZ__c, SC_a0no0000000n0N6AAI__c, SC_a0no0000000n0N5AAI__c, SC_a0no0000000n0N3AAI__c FROM JBCXM__USageData__c WHERE Name = 'ACCOUNTLEVEL'
+                    AND JBCXM__Account__c =: accountId AND JBCXM__WeekLabel__c =: weekStart
+                ];
+            }
+            Catch(Exception Ex) {
+                system.debug('no records for week ' + weekStart);
+                ud = new JBCXM__USageData__c();
+            }
+            if (ud.Id == null) {
+                ud.JBCXM__Account__c = accountId;
+                ud.JBCXM__WeekLabel__c = weekstart;
+                ud.JBCXM__Date__c = weekStart;
+                ud.Name = 'ACCOUNTLEVEL';
+            }
+            ud.SC_Overallscore__c = Decimal.valueOf(getRandomNumber_35());
+            ud.SC_a0no000000KmmKWAAZ__c = Decimal.valueOf(getRandomNumber_35());
+            ud.SC_a0no000000KmmEuAAJ__c = Decimal.valueOf(getRandomNumber_35());
+            ud.SC_a0no000000KmmJLAAZ__c = Decimal.valueOf(getRandomNumber_35());
+            ud.SC_a0no000000KmmHyAAJ__c = Decimal.valueOf(getRandomNumber_35());
+            ud.SC_a0no000000KmmJGAAZ__c = Decimal.valueOf(getRandomNumber_35());
+            ud.SC_a0no0000000n0N6AAI__c = Decimal.valueOf(getRandomNumber_35());
+            ud.SC_a0no0000000n0N5AAI__c = Decimal.valueOf(getRandomNumber_35());
+            ud.SC_a0no0000000n0N3AAI__c = Decimal.valueOf(getRandomNumber_35());
+            udList.add(ud);
+            system.debug('inserted ud => ' + ud);
+
+            weekStart = weekStart - 7;
+            i--;
         }
 
-        if(udList.size() > 0){
-           upsert udList;
+        if (udList.size() > 0) {
+            upsert udList;
         }
 
 
@@ -254,7 +259,7 @@ public class DemoSetUp_Controller {
         for (JBCXM__CTA__c cta: [SELECT Id, Name, JBCXM__Account__r.Name, JBCXM__DueDate__c, JBCXM__TypeName__c, JBCXM__IsRecurring__c, JBCXM__STAGE__r.Name, JBCXM__Parent__c FROM JBCXM__CTA__c WHERE JBCXM__Account__c != null and JBCXM__STAGE__r.Name != 'Closed Success'
                 AND JBCXM__STAGE__r.Name != 'Deprecated Internal Escalation'
                 AND JBCXM__STAGE__r.Name != 'Closed Lost'
-                and JBCXM__DueDate__c >= 2015-09-30 and JBCXM__TypeName__c != 'Objective'
+                and JBCXM__DueDate__c >= 2015 - 09 - 30 and JBCXM__TypeName__c != 'Objective'
                 and JBCXM__Account__r.JBCXM__CustomerInfo__c != null ORDER BY JBCXM__Account__r.Name
             ]) {
             accountIds_set.add(cta.JBCXM__Account__c);
@@ -280,7 +285,7 @@ public class DemoSetUp_Controller {
         for (JBCXM__USageData__c ud: [SELECT id, SC_Overallscore__c, SC_a0no000000KmmKWAAZ__c, SC_a0no000000KmmEuAAJ__c, SC_a0no000000KmmJLAAZ__c, SC_a0no000000KmmHyAAJ__c,
                 SC_a0no000000KmmJGAAZ__c, SC_a0no0000000n0N6AAI__c, SC_a0no0000000n0N5AAI__c
                 FROM JBCXM__USageData__c WHERE JBCXM__Account__c = '0014100000AJHjcAAH'
-                AND(JBCXM__WeekLabel__c = 2016-11-13 OR JBCXM__WeekLabel__c = 2016-11-06) ORDER BY Id Desc LIMIT 2
+                AND(JBCXM__WeekLabel__c = 2016 - 11 - 13 OR JBCXM__WeekLabel__c = 2016 - 11 - 06) ORDER BY Id Desc LIMIT 2
             ]) {
             udList.add(ud);
         }
@@ -296,62 +301,71 @@ public class DemoSetUp_Controller {
     public String getRandomNumber_35() {
         return String.valueOf(Integer.ValueOf(Math.floor(Math.random() * (98 - 35 + 1) + 35)));
     }
-    
+
     public Integer getRandomNumber_10() {
         return Integer.ValueOf(Math.floor(Math.random() * (98 - 35 + 1) + 35));
     }
-    public void alertSponsorTracking(){
-        List<JBCXM__SponsorTracking__c> updateList = new List<JBCXM__SponsorTracking__c>();
-        for(JBCXM__SponsorTracking__c st: [select id,JBCXM__IsChanged__c FROM JBCXM__SponsorTracking__c WHERE JBCXM__SponsorFullName__c IN ('Mike Madison', 'Laura James')]){
+    public void alertSponsorTracking() {
+        List < JBCXM__SponsorTracking__c > updateList = new List < JBCXM__SponsorTracking__c > ();
+        for (JBCXM__SponsorTracking__c st: [select id, JBCXM__IsChanged__c FROM JBCXM__SponsorTracking__c WHERE JBCXM__SponsorFullName__c IN('Mike Madison', 'Laura James')]) {
             st.JBCXM__IsChanged__c = true;
             updateList.add(st);
         }
 
-        if(updateList.size() > 0){
+        if (updateList.size() > 0) {
             update updateList;
         }
     }
 
     public void fixCTA_views() {
-       List<JBCXM__GSCockpitView__c> viewList = new LIst<JBCXM__GSCockpitView__c>();
+        List < JBCXM__GSCockpitView__c > viewList = new LIst < JBCXM__GSCockpitView__c > ();
         Id newId = [SELECT Id, Name FROM JBCXM__GSReportCategory__c WHERE Name = 'Open'].Id;
         String str;
-        for(JBCXM__GSCockpitView__c v: [SELECT Id, Name, JBCXM__WhereClause__c FROM JBCXM__GSCockpitView__c WHERE Name = 'My CTAs' OR Name = 'All CTAs']){
+        for (JBCXM__GSCockpitView__c v: [SELECT Id, Name, JBCXM__WhereClause__c FROM JBCXM__GSCockpitView__c WHERE Name = 'My CTAs'
+                OR Name = 'All CTAs'
+            ]) {
             str = v.JBCXM__WhereClause__c;
             v.JBCXM__WhereClause__c = str.replace('a1ao000000fAw0OAAS', newId);
-            viewList.add(v);   
+            viewList.add(v);
         }
 
-        if(Viewlist.size() > 0){
+        if (Viewlist.size() > 0) {
             update viewList;
         }
     }
-    
-    public void fixTask_DueDates(){
-        List<JBCXM__CSTask__c> taskList = new List<JBCXM__CSTask__c>();
-        for(JBCXM__CSTask__c task : [SELECT Id, JBCXM__Date__c FROM JBCXM__CSTask__c WHERE JBCXM__Date__c != null]){
+
+    public void fixTask_DueDates() {
+        List < JBCXM__CSTask__c > taskList = new List < JBCXM__CSTask__c > ();
+        for (JBCXM__CSTask__c task: [SELECT Id, JBCXM__Date__c FROM JBCXM__CSTask__c WHERE JBCXM__Date__c != null]) {
             task.JBCXM__Date__c = System.today() + getRandomNumber_10();
-            taskList.add(task);  
-            system.debug('updating Task due date => '+task.JBCXM__Date__c);
+            taskList.add(task);
+            system.debug('updating Task due date => ' + task.JBCXM__Date__c);
         }
         update taskList;
     }
-    
-    public void fixCTAs_DueDates(){
-        List<JBCXM__CTA__c> CTAList = new List<JBCXM__CTA__c>();
-        for(JBCXM__CTA__c CTA : [SELECT Id,JBCXM__Assignee__c,Name,JBCXM__DueDate__c FROM JBCXM__CTA__c WHERE JBCXM__DueDate__c != null]){
+
+    public void fixCTAs_DueDates() {
+        List < JBCXM__CTA__c > CTAList = new List < JBCXM__CTA__c > ();
+        for (JBCXM__CTA__c CTA: [SELECT Id, JBCXM__Assignee__c, Name, JBCXM__DueDate__c FROM JBCXM__CTA__c WHERE JBCXM__DueDate__c != null]) {
             CTA.JBCXM__DueDate__c = System.today() + getRandomNumber_10();
-            CTAList.add(CTA);  
-            system.debug('updating cta due date => '+CTA.JBCXM__DueDate__c);
+            CTAList.add(CTA);
+            system.debug('updating cta due date => ' + CTA.JBCXM__DueDate__c);
         }
         update CTAList;
     }
 
+    public void alertSponsorTracking() {
+        List < JBCXM__SponsorTracking__c > updateList = new List <JBCXM__SponsorTracking__c > ();
+        for (JBCXM__SponsorTracking__c st: [select id, JBCXM__IsChanged__c FROM JBCXM__SponsorTracking__c WHERE JBCXM__SponsorFullName__c IN('Mike Madison', 'Laura James')]) {
+            st.JBCXM__IsChanged__c = true;
+            updateList.add(st);
+        }
+
+        if (updateList.size() > 0) {
+
+            update updateList;
+
+        }
+    }
+
 }
-/* 
-Update Empty Colums in score card history
-SELECT id, JBCXM__WeekLabel__c, SC_Overallscore__c, SC_a0no000000KmmKWAAZ__c, SC_a0no000000KmmEuAAJ__c, SC_a0no000000KmmJLAAZ__c, SC_a0no000000KmmHyAAJ__c,
-SC_a0no000000KmmJGAAZ__c, SC_a0no0000000n0N6AAI__c, SC_a0no0000000n0N5AAI__c 
-FROM JBCXM__USageData__c WHERE JBCXM__Account__c = 'abbetId' 
-AND (JBCXM__WeekLabel__c = 2016-11-13 OR JBCXM__WeekLabel__c = 2016-11-06 ) ORDER BY Id 
-*/
