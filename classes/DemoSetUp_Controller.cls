@@ -303,7 +303,7 @@ public class DemoSetUp_Controller {
     }
 
     public Integer getRandomNumber_10() {
-        return Integer.ValueOf(Math.floor(Math.random() * (98 - 35 + 1) + 35));
+        return Integer.ValueOf(Math.floor(Math.random() * (90 - 10 + 1) + 10));
     }
     public void alertSponsorTracking() {
         List < JBCXM__SponsorTracking__c > updateList = new List < JBCXM__SponsorTracking__c > ();
