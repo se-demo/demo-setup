@@ -285,8 +285,7 @@ public class DemoSetUp_Controller {
         for (JBCXM__USageData__c ud: [SELECT id, SC_Overallscore__c, SC_a0no000000KmmKWAAZ__c, SC_a0no000000KmmEuAAJ__c, SC_a0no000000KmmJLAAZ__c, SC_a0no000000KmmHyAAJ__c,
                 SC_a0no000000KmmJGAAZ__c, SC_a0no0000000n0N6AAI__c, SC_a0no0000000n0N5AAI__c
                 FROM JBCXM__USageData__c WHERE JBCXM__Account__c = '0014100000AJHjcAAH'
-                AND(JBCXM__WeekLabel__c = 2016 - 11 - 13 OR JBCXM__WeekLabel__c = 2016 - 11 - 06) ORDER BY Id Desc LIMIT 2
-            ]) {
+                AND(JBCXM__WeekLabel__c = 2016 - 11 - 13 OR JBCXM__WeekLabel__c = 2016-11-06) ORDER BY Id Desc LIMIT 2]) {
             udList.add(ud);
         }
         if (udList.size() > 0) {
