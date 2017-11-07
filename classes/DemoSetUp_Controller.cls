@@ -259,7 +259,7 @@ public class DemoSetUp_Controller {
         for (JBCXM__CTA__c cta: [SELECT Id, Name, JBCXM__Account__r.Name, JBCXM__DueDate__c, JBCXM__TypeName__c, JBCXM__IsRecurring__c, JBCXM__STAGE__r.Name, JBCXM__Parent__c FROM JBCXM__CTA__c WHERE JBCXM__Account__c != null and JBCXM__STAGE__r.Name != 'Closed Success'
                 AND JBCXM__STAGE__r.Name != 'Deprecated Internal Escalation'
                 AND JBCXM__STAGE__r.Name != 'Closed Lost'
-                and JBCXM__DueDate__c >= 2015 - 09 - 30 and JBCXM__TypeName__c != 'Objective'
+                and JBCXM__DueDate__c >= 2015-09-30 and JBCXM__TypeName__c != 'Objective'
                 and JBCXM__Account__r.JBCXM__CustomerInfo__c != null ORDER BY JBCXM__Account__r.Name
             ]) {
             accountIds_set.add(cta.JBCXM__Account__c);
