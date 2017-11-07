@@ -296,9 +296,10 @@ public class DemoSetUp_Controller {
     public String getRandomNumber_35() {
         return String.valueOf(Integer.ValueOf(Math.floor(Math.random() * (98 - 35 + 1) + 35)));
     }
-
-
-
+    
+    public Integer getRandomNumber_10() {
+        return Integer.ValueOf(Math.floor(Math.random() * (98 - 35 + 1) + 35));
+    }
     public void alertSponsorTracking(){
         List<JBCXM__SponsorTracking__c> updateList = new List<JBCXM__SponsorTracking__c>();
         for(JBCXM__SponsorTracking__c st: [select id,JBCXM__IsChanged__c FROM JBCXM__SponsorTracking__c WHERE JBCXM__SponsorFullName__c IN ('Mike Madison', 'Laura James')]){
@@ -329,7 +330,7 @@ public class DemoSetUp_Controller {
     public void fixTask_DueDates(){
         List<JBCXM__CSTask__c> taskList = new List<JBCXM__CSTask__c>();
         for(JBCXM__CSTask__c task : [SELECT Id, JBCXM__Date__c FROM JBCXM__CSTask__c WHERE JBCXM__Date__c != null]){
-            task.JBCXM__Date__c = task.JBCXM__Date__c + 7;
+            task.JBCXM__Date__c = System.today() + getRandomNumber_10();
             taskList.add(task);  
             system.debug('updating Task due date => '+task.JBCXM__Date__c);
         }
@@ -339,7 +340,7 @@ public class DemoSetUp_Controller {
     public void fixCTAs_DueDates(){
         List<JBCXM__CTA__c> CTAList = new List<JBCXM__CTA__c>();
         for(JBCXM__CTA__c CTA : [SELECT Id,JBCXM__Assignee__c,Name,JBCXM__DueDate__c FROM JBCXM__CTA__c WHERE JBCXM__DueDate__c != null]){
-            CTA.JBCXM__DueDate__c = CTA.JBCXM__DueDate__c + 7;
+            CTA.JBCXM__DueDate__c = System.today() + getRandomNumber_10();
             CTAList.add(CTA);  
             system.debug('updating cta due date => '+CTA.JBCXM__DueDate__c);
         }
